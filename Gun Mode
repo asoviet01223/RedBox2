@@ -1,6 +1,6 @@
 local player = game.Players.LocalPlayer
 
-local function refillAmmoForTools()
+while true do
     for _, tool in pairs(player.Backpack:GetChildren()) do
         if tool:IsA("Tool") then
             local varsFolder = tool:FindFirstChild("Vars")
@@ -19,26 +19,5 @@ local function refillAmmoForTools()
             end
         end
     end
-end
-
-player.Backpack.ChildAdded:Connect(function(child)
-    if child:IsA("Tool") then
-        refillAmmoForTools()
-    end
-end)
-
-player.Backpack.ChildRemoved:Connect(function(child)
-    if child:IsA("Tool") then
-        refillAmmoForTools()
-    end
-end)
-
-player.CharacterAdded:Connect(function(character)
-    character:WaitForChild("HumanoidRootPart")
-    wait(0.1)
-    refillAmmoForTools()
-end)
-
-if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-    refillAmmoForTools()
+    wait(0.1) -- 성능을 고려해 0.1초마다 실행
 end
