@@ -1,0 +1,44 @@
+local player = game.Players.LocalPlayer
+
+local function refillAmmoForTools()
+    for _, tool in pairs(player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            local varsFolder = tool:FindFirstChild("Vars")
+            if varsFolder then
+                local reserveValue = varsFolder:FindFirstChild("reserve")
+                local magazineValue = varsFolder:FindFirstChild("magazine")
+                
+                if reserveValue and magazineValue then
+                    if reserveValue.Value < 6666 then
+                        reserveValue.Value = 6666
+                    end
+                    if magazineValue.Value < 6666 then
+                        magazineValue.Value = 6666
+                    end
+                end
+            end
+        end
+    end
+end
+
+player.Backpack.ChildAdded:Connect(function(child)
+    if child:IsA("Tool") then
+        refillAmmoForTools()
+    end
+end)
+
+player.Backpack.ChildRemoved:Connect(function(child)
+    if child:IsA("Tool") then
+        refillAmmoForTools()
+    end
+end)
+
+player.CharacterAdded:Connect(function(character)
+    character:WaitForChild("HumanoidRootPart")
+    wait(0.1)
+    refillAmmoForTools()
+end)
+
+if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+    refillAmmoForTools()
+end
