@@ -1,7 +1,5 @@
--- LocalPlayer 참조
 local player = game:GetService("Players").LocalPlayer
 
--- 탄약을 리필하는 함수
 local function refillAmmo(tool)
     local varsFolder = tool:FindFirstChild("Vars")
     if varsFolder then
@@ -17,12 +15,11 @@ local function refillAmmo(tool)
     end
 end
 
--- 지속적으로 툴을 검사하고 탄약 리필
 while true do
     for _, tool in pairs(player.Backpack:GetChildren()) do
         if tool:IsA("Tool") then
             refillAmmo(tool)
         end
     end
-    wait(0.1) -- 0.1초 간격으로 검사
+    wait(0.5)
 end
