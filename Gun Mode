@@ -1,23 +1,31 @@
 local player = game.Players.LocalPlayer
 
-while true do
-    for _, tool in pairs(player.Backpack:GetChildren()) do
-        if tool:IsA("Tool") then
-            local varsFolder = tool:FindFirstChild("Vars")
-            if varsFolder then
-                local reserveValue = varsFolder:FindFirstChild("reserve")
-                local magazineValue = varsFolder:FindFirstChild("magazine")
-                
-                if reserveValue and magazineValue then
-                    if reserveValue.Value < 6666 then
-                        reserveValue.Value = 6666
-                    end
-                    if magazineValue.Value < 6666 then
-                        magazineValue.Value = 6666
+-- 계속적으로 Tool 검사를 실행하는 함수
+local function continuouslyRefillAmmo()
+    while true do
+        for _, tool in pairs(player.Backpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                local varsFolder = tool:FindFirstChild("Vars")
+                if varsFolder then
+                    local reserveValue = varsFolder:FindFirstChild("reserve")
+                    local magazineValue = varsFolder:FindFirstChild("magazine")
+                    
+                    if reserveValue and magazineValue then
+                        if reserveValue.Value < 6666 then
+                            reserveValue.Value = 6666
+                        end
+                        if magazineValue.Value < 6666 then
+                            magazineValue.Value = 6666
+                        end
                     end
                 end
             end
         end
+        wait(0.1) -- 0.1초마다 검사
     end
-    wait(0.1) -- 성능을 고려해 0.1초마다 실행
 end
+
+-- 캐릭터 재생성 시에도 루프를 유지
+spawn(function()
+    continuouslyRefillAmmo()
+end)
