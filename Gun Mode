@@ -1,29 +1,28 @@
-local player = game.Players.LocalPlayer
+-- LocalPlayer 참조
+local player = game:GetService("Players").LocalPlayer
 
+-- 탄약을 리필하는 함수
 local function refillAmmo(tool)
     local varsFolder = tool:FindFirstChild("Vars")
-    if not varsFolder then return end
-    
-    local reserveValue = varsFolder:FindFirstChild("reserve")
-    local magazineValue = varsFolder:FindFirstChild("magazine")
+    if varsFolder then
+        local reserveValue = varsFolder:FindFirstChild("reserve")
+        local magazineValue = varsFolder:FindFirstChild("magazine")
 
-    if reserveValue and reserveValue.Value < 6666 then
-        reserveValue.Value = 6666
-    end
-    if magazineValue and magazineValue.Value < 6666 then
-        magazineValue.Value = 6666
-    end
-end
-
-local function continuouslyRefillAmmo()
-    while true do
-        for _, tool in pairs(player.Backpack:GetChildren()) do
-            if tool:IsA("Tool") then
-                refillAmmo(tool)
-            end
+        if reserveValue and reserveValue:IsA("NumberValue") and reserveValue.Value < 6666 then
+            reserveValue.Value = 6666
         end
-        wait(0.5)
+        if magazineValue and magazineValue:IsA("NumberValue") and magazineValue.Value < 6666 then
+            magazineValue.Value = 6666
+        end
     end
 end
 
-spawn(continuouslyRefillAmmo)
+-- 지속적으로 툴을 검사하고 탄약 리필
+while true do
+    for _, tool in pairs(player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            refillAmmo(tool)
+        end
+    end
+    wait(0.1) -- 0.1초 간격으로 검사
+end
