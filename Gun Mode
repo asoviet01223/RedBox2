@@ -1,25 +1,36 @@
 local player = game:GetService("Players").LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+local MAX_AMMO = 6666
 
 local function refillAmmo(tool)
     local varsFolder = tool:FindFirstChild("Vars")
-    if varsFolder then
-        local reserveValue = varsFolder:FindFirstChild("reserve")
-        local magazineValue = varsFolder:FindFirstChild("magazine")
+    if not varsFolder then return end
 
-        if reserveValue and reserveValue:IsA("NumberValue") and reserveValue.Value < 6666 then
-            reserveValue.Value = 6666
-        end
-        if magazineValue and magazineValue:IsA("NumberValue") and magazineValue.Value < 6666 then
-            magazineValue.Value = 6666
-        end
+    local reserveValue = varsFolder:FindFirstChild("reserve")
+    local magazineValue = varsFolder:FindFirstChild("magazine")
+
+    if reserveValue and reserveValue:IsA("NumberValue") and reserveValue.Value < MAX_AMMO then
+        reserveValue.Value = MAX_AMMO
+    end
+
+    if magazineValue and magazineValue:IsA("NumberValue") and magazineValue.Value < MAX_AMMO then
+        magazineValue.Value = MAX_AMMO
     end
 end
 
-while true do
-    for _, tool in pairs(player.Backpack:GetChildren()) do
+local function refillAllTools()
+    for _, tool in pairs(backpack:GetChildren()) do
         if tool:IsA("Tool") then
             refillAmmo(tool)
         end
     end
-    wait(0.5)
 end
+
+backpack.ChildAdded:Connect(function(child)
+    if child:IsA("Tool") then
+        refillAmmo(child)
+    end
+end)
+
+refillAllTools()
